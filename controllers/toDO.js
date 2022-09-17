@@ -30,7 +30,7 @@ exports.fetchAllToDo = (req, res, next) => {
 
 exports.editToDo = (req, res, next) => {
   toDo
-    .updateOne(
+    .findByIdAndUpdate(
       {
         _id: req.params.toDoId,
       },
@@ -61,7 +61,7 @@ exports.changeStatusToDo = (req, res, next) => {
   }
 
   toDo
-    .updateOne(
+    .findByIdAndUpdate(
       {
         _id: req.params.toDoId,
       },
@@ -90,7 +90,7 @@ exports.createToDoList = (req, res, next) => {
 
 exports.editToDoList = (req, res, next) => {
   toDoList
-    .updateOne(
+    .findByIdAndUpdate(
       {
         _id: req.params.toDoListId,
       },
@@ -126,8 +126,8 @@ exports.changeStatusToDoList = (req, res, next) => {
     endAt = new Date();
   }
 
-  toDo
-    .updateOne(
+  toDoList
+    .findByIdAndUpdate(
       {
         _id: req.params.toDoListId,
       },
