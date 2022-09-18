@@ -11,6 +11,7 @@ import {
 const App = () => {
   const email = useRef();
   const password = useRef();
+  const file = useRef();
 
   firebase.auth(initializeApp);
 
@@ -58,6 +59,28 @@ const App = () => {
       });
   };
 
+  const FileHandaler = () => {
+    const formData = new FormData();
+
+    formData.append("file", file.current.files[0]);
+
+    fetch("http://localhost:8080/post-note", {
+      method: "POST",
+      body: formData,
+      headers: {
+        Authorization: "bearer " + localStorage.getItem("idToken"),
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        return res.json();
+      })
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div>
       <input ref={email} placeholder="email"></input>
@@ -65,6 +88,8 @@ const App = () => {
       <button onClick={GoogleAutoSignin}>Connect Google</button>
       <button onClick={GoogleManualSignup}>Sign up</button>
       <button onClick={GoogleManualSignin}>Sign in</button>
+      <input ref={file} type="file"></input>
+      <button onClick={FileHandaler}>Submit</button>
     </div>
   );
 };

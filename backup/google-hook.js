@@ -10,6 +10,7 @@ const AutoSigninHandaler = (user) => {
       return res.json();
     })
     .then((result) => {
+      localStorage.setItem("idToken", result.token);
       console.log(result);
     })
     .catch((err) => console.log(err));

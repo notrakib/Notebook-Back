@@ -25,8 +25,6 @@ exports.fetchAllToDo = (req, res, next) => {
     })
     .catch((err) => next(err));
 };
-// { user: "6321e823a8e076246a0a803b" }
-// Places.find({location: { $in: [location ids] }})
 
 exports.editToDo = (req, res, next) => {
   toDo

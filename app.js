@@ -5,11 +5,37 @@ const toDoRoute = require("./routes/toDo");
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
+const multer = require("multer");
 const mongoose = require("mongoose");
+
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + "-" + file.originalname);
+  },
+});
+
+// const fileFilter = (req, file, cb) => {
+//   if (
+//     file.mimetype === "image/png" ||
+//     file.mimetype === "image/jpg" ||
+//     file.mimetype === "image/jpeg"
+//   ) {
+//     cb(null, true);
+//   } else {
+//     cb(null, false);
+//   }
+// };
 
 const app = express();
 
 app.use(bodyParser.json());
+// app.use(
+//   multer({ storage: fileStorage, fileFilter: fileFilter }).single("file")
+// );
+app.use(multer({ storage: fileStorage }).single("file"));
 
 app.use(express.static(path.join(__dirname, "images")));
 

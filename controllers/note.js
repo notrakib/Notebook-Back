@@ -1,25 +1,39 @@
 const Note = require("../models/note");
+const fs = require("fs");
 
 exports.postNote = (req, res, next) => {
+  if (!req.file) {
+    throw Error("No file attached");
+  }
   const user = req.userId;
-  const file = req.file;
   const filename = req.file.filename;
   const mimetype = req.file.mimetype;
   const lastUpdatedAt = new Date();
 
-  Note.create({ user, file, filename, mimetype, lastUpdatedAt })
-    .then(() => {
-      res.json("Done");
+  Note.findOne({ user })
+    .then((note) => {
+      if (note) {
+        fs.unlink(`images/${note.filename}`, (err) => {
+          if (err) {
+            next(err);
+          }
+        });
+        note.filename = filename;
+        return note.save();
+      } else {
+        return Note.create({ user, filename, mimetype, lastUpdatedAt });
+      }
+    })
+    .then((newNote) => {
+      res.json(newNote);
     })
     .catch((err) => next(err));
 };
 
 exports.getNote = (req, res, next) => {
-  const user = req.userId;
-
-  Note.findOne({ user })
-    .then(() => {
-      res.json("Done");
+  Note.findOne({ user: req.userId })
+    .then((note) => {
+      res.json(note);
     })
     .catch((err) => next(err));
 };
