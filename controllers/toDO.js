@@ -43,7 +43,7 @@ exports.editToDo = (req, res, next) => {
 exports.deleteToDo = (req, res, next) => {
   toDo
     .deleteOne({
-      _id: req.params.toDoId,
+      _id: req.params.taskId,
     })
     .then((result) => {
       return res.json(result);
@@ -74,14 +74,23 @@ exports.changeStatusToDo = (req, res, next) => {
 exports.createToDoList = (req, res, next) => {
   toDoList
     .create({
-      toDo: req.params.toDoId,
+      toDo: req.params.taskId,
       text: req.body.text,
       status: "Open",
-      startAt: req.body.startAt || new Date(),
-      endAt: req.body.endAt || null,
+      startAt: req.body.startAt,
+      endAt: req.body.endAt,
     })
     .then((toDoList) => {
       return res.json(toDoList);
+    })
+    .catch((err) => next(err));
+};
+
+exports.fetchAllToDoList = (req, res, next) => {
+  toDoList
+    .find({ toDo: req.params.taskId })
+    .then((taskLists) => {
+      return res.json(taskLists);
     })
     .catch((err) => next(err));
 };
@@ -90,7 +99,7 @@ exports.editToDoList = (req, res, next) => {
   toDoList
     .findByIdAndUpdate(
       {
-        _id: req.params.toDoListId,
+        _id: req.params.taskListId,
       },
       {
         $set: {
@@ -119,15 +128,15 @@ exports.deleteToDoList = (req, res, next) => {
 
 exports.changeStatusToDoList = (req, res, next) => {
   if (req.body.status === "Open") {
-    endAt = req.body.endAt;
+    endAt = null;
   } else {
-    endAt = new Date();
+    endAt = `${new Date().getDate()}-${new Date().getMonth()}-${new Date().getFullYear()}`;
   }
 
   toDoList
     .findByIdAndUpdate(
       {
-        _id: req.params.toDoListId,
+        _id: req.params.taskListId,
       },
       { $set: { status: req.body.status, endAt } }
     )

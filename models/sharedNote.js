@@ -7,7 +7,7 @@ const sharedNoteSchema = new Schema({
   title: String,
   note: String,
   comment: String,
-  sharedAt: Date,
+  sharedAt: String,
 });
 
 module.exports = mongoose.model("sharedNote", sharedNoteSchema);

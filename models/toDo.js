@@ -6,8 +6,8 @@ const toDoSchema = new Schema(
     user: { type: Schema.Types.ObjectId, ref: "User" },
     toDoTitle: String,
     status: String,
-    createdAt: Date,
-    endedAt: Date,
+    createdAt: String,
+    endedAt: String,
   },
   { toJSON: { virtuals: true } }
 );
