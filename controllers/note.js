@@ -5,23 +5,19 @@ exports.postNote = (req, res, next) => {
   if (!req.file) {
     throw Error("No file attached");
   }
-  const user = req.userId;
-  const filename = req.file.filename;
+  // const user = req.userId;
+  const user = "63258c1fc9cb1e09a9d3dd4e";
+  const filename = req.file.originalname;
   const mimetype = req.file.mimetype;
-  const lastUpdatedAt = new Date();
+  const lastEdited = new Date();
 
   Note.findOne({ user })
     .then((note) => {
       if (note) {
-        fs.unlink(`images/${note.filename}`, (err) => {
-          if (err) {
-            next(err);
-          }
-        });
-        note.filename = filename;
+        note.lastEdited = lastEdited;
         return note.save();
       } else {
-        return Note.create({ user, filename, mimetype, lastUpdatedAt });
+        return Note.create({ user, filename, mimetype, lastEdited });
       }
     })
     .then((newNote) => {

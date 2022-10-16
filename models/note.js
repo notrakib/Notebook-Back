@@ -5,7 +5,7 @@ const noteSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "User" },
   filename: { type: String, required: true },
   mimetype: { type: String, required: true },
-  lastUpdatedAt: Date,
+  lastEdited: Date,
 });
 
 module.exports = mongoose.model("Note", noteSchema);
